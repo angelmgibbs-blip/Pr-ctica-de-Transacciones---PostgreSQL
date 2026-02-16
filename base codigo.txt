@@ -1,0 +1,67 @@
+docker run --name dbuf \
+  -e POSTGRES_PASSWORD=root \
+  -e POSTGRES_USER=root \
+  -e POSTGRES_DB=ufdb \
+  -p 5432:5432 \
+  -d postgres
+
+📝 Parte 2: 
+
+SQL
+
+CREATE TABLE usuario (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    email VARCHAR(200) NOT NULL UNIQUE
+);
+
+
+CREATE TABLE cuenta (
+    id SERIAL PRIMARY KEY,
+    usuario_id INTEGER NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
+    CONSTRAINT fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+    CONSTRAINT chk_monto_positivo CHECK (monto >= 0)
+);
+
+INSERT INTO usuario (nombre, apellido, email) VALUES 
+('Alice', 'Sosa', 'asosa@gmail.com'),
+('Pedro', 'Rodriguez', 'prodriguez@gmail.com');
+
+INSERT INTO cuenta (usuario_id, monto) VALUES 
+(1, 1000.00), 
+(2, 500.00);
+
+🔄 Parte 3:
+
+SQL
+BEGIN;
+
+UPDATE cuenta SET monto = monto - 200 WHERE usuario_id = 1;
+
+UPDATE cuenta SET monto = monto + 200 WHERE usuario_id = 2;
+
+COMMIT;
+
+SELECT * FROM cuenta;
+
+🚦 Parte 4: 
+
+Sesión 1 (Pestaña 1):
+
+BEGIN;
+UPDATE cuenta SET monto = monto - 100 WHERE usuario_id = 1;
+
+Sesión 2 (Pestaña 2):
+
+UPDATE cuenta SET monto = monto + 500 WHERE usuario_id = 1;
+
+⚠️ Parte 5: Rollback Automático
+
+BEGIN;
+
+UPDATE cuenta SET monto = monto - 2000 WHERE usuario_id = 2;
+
+
+ROLLBACK; -- Para limpiar el estado de la sesión
