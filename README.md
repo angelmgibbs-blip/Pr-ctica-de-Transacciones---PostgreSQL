@@ -1,2 +1,5 @@
-# Pr-ctica-de-Transacciones---PostgreSQL
-Práctica sobre transacciones y concurrencia.
+# Práctica: Transacciones y Concurrencia en PostgreSQL
+
+**Estudiante:** [AngelGibbs]
+
+### 📺 Enlace al Video Explicativo:
